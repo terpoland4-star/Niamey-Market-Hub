@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#E05206">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <title>Niamey Market Hub</title>
+</head>
+<body>
+    <!-- Bannière défilante -->
+    <div class="construction-banner" role="marquee">
+        <div class="construction-banner__text" id="banner-text"></div>
+    </div>
+
+    <!-- Barre d'outils -->
+    <header class="toolbar">
+        <div class="toolbar-left">
+            <select id="lang-selector" class="toolbar-select" aria-label="Langue">
+                <option value="fr">FR</option>
+                <option value="en">EN</option>
+            </select>
+        </div>
+        <div class="toolbar-right">
+            <button id="theme-toggle" class="toolbar-btn" title="Mode sombre">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button id="high-contrast-toggle" class="toolbar-btn" title="Contraste élevé">
+                <i class="fas fa-adjust"></i>
+            </button>
+            <button id="font-decrease" class="toolbar-btn" title="Texte plus petit">A−</button>
+            <button id="font-increase" class="toolbar-btn" title="Texte plus grand">A+</button>
+            <button id="font-reset" class="toolbar-btn" title="Réinitialiser">
+                <i class="fas fa-undo-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <div id="app"></div>
+    <div id="footer-app"></div>
+
+    <!-- Bouton WhatsApp flottant -->
+    <div class="whatsapp-float" id="whatsappFloat">
+        <div class="whatsapp-float__bubble" id="whatsappBubble">Besoin d'aide ?</div>
+        <a href="#" target="_blank" rel="noopener" class="whatsapp-float__btn" id="whatsappLink" aria-label="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/shop-config.js"></script>
+    <script src="js/shop-loader.js" type="module"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/install.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/payments.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('SW enregistré'))
+                .catch(err => console.error('SW erreur', err));
+        }
+    </script>
+</body>
+</html>
