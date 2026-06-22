@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=src/index.html">
+    <title>Niamey Market Hub</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #f5f5f5;
+        }
+        .redirect-box {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-width: 400px;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ddd;
+            border-top-color: #E05206;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        h1 {
+            color: #E05206;
+            font-size: 24px;
+            margin: 0 0 10px;
+        }
+        p {
+            color: #666;
+            margin: 0 0 20px;
+        }
+        a {
+            color: #1B6B93;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="redirect-box">
+        <div class="spinner"></div>
+        <h1>Niamey Market Hub</h1>
+        <p>Redirection vers la boutique...</p>
+        <p><a href="src/index.html">Cliquez ici si la redirection ne fonctionne pas</a></p>
+    </div>
+</body>
+</html>
