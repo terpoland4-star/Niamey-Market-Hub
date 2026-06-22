@@ -1,0 +1,23 @@
+{
+    "name": "Niamey Market Hub",
+    "short_name": "MarketHub",
+    "description": "Plateforme de boutiques en ligne à Niamey",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#E05206",
+    "icons": [
+        {
+            "src": "assets/web-app-manifest-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "assets/web-app-manifest-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ]
+}
