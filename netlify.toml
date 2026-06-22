@@ -1,8 +1,150 @@
-[build]
-  publish = "src"
-  functions = "netlify/functions"
+# ==========================================
+# Netlify Configuration – Niamey Market Hub
+# Version 2.0 – Sécurité et performances
+# ==========================================
 
+[build]
+  publish = "src/"
+  command = "echo 'Build completed'"
+
+# ==========================================
+# HEADERS DE SÉCURITÉ GLOBAUX
+# ==========================================
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Protection contre le sniffing MIME
+    X-Content-Type-Options = "nosniff"
+    
+    # Protection contre le clickjacking
+    X-Frame-Options = "SAMEORIGIN"
+    
+    # Référent seulement pour le même domaine
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Désactiver les fonctionnalités inutiles
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    
+    # HSTS (forcer HTTPS)
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    
+    # Cross-Origin Isolation (optionnel)
+    Cross-Origin-Embedder-Policy = "require-corp"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+# ==========================================
+# CONTENT SECURITY POLICY (CSP)
+# ==========================================
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.onesignal.com https://cdnjs.cloudflare.com;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+      font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+      img-src 'self' data: https: blob:;
+      connect-src 'self' https://api.niameymarkethub.com https://cdn.onesignal.com;
+      media-src 'self';
+      frame-src 'self';
+      worker-src 'self' blob:;
+      manifest-src 'self';
+    """
+
+# ==========================================
+# CACHE OPTIMISÉ
+# ==========================================
+
+# Assets statiques (long cache)
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# JavaScript et CSS (cache moyen)
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, must-revalidate"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, must-revalidate"
+
+# Configurations boutique (cache court)
+[[headers]]
+  for = "/shops/*"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+# Service Worker (pas de cache)
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Service-Worker-Allowed = "/"
+
+# Manifest
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+    Content-Type = "application/manifest+json"
+
+# HTML (pas de cache)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
+
+# ==========================================
+# COMPRESSION
+# ==========================================
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Content-Encoding = "br"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Content-Encoding = "br"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Content-Encoding = "br"
+
+[[headers]]
+  for = "/*.json"
+  [headers.values]
+    Content-Encoding = "br"
+
+# ==========================================
+# REDIRECTIONS SPA
+# ==========================================
+
+# Toutes les routes vers index.html (SPA)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
+
+# Redirection www vers non-www
+[[redirects]]
+  from = "https://www.niameymarkethub.com/*"
+  to = "https://niameymarkethub.com/:splat"
+  status = 301
+
+# ==========================================
+# ENVIRONNEMENT
+# ==========================================
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_VERSION = "9"
