@@ -1,30 +1,26 @@
 // ==========================================
-// Niamey Market Hub – Configuration par défaut (fallback)
-// Version 2.0 – Avec validation et schéma
+// Niamey Market Hub – Configuration boutique démo
+// Version finale – Prête pour production
 // ==========================================
 
 const SHOP_CONFIG = {
-    // ---------- MÉTADONNÉES ----------
-    version: '2.0.0',
-    schemaVersion: '1.0',
-    
     // ---------- IDENTITÉ ----------
-    slug: 'default',
-    name: 'Niamey Market Hub',
-    tagline: 'Votre plateforme de boutiques en ligne',
-    description: 'Bienvenue sur Niamey Market Hub, la plateforme qui connecte les commerçants et les clients.',
+    slug: 'boutique-demo',
+    name: 'Ma Boutique Démo',
+    tagline: 'Votre boutique en ligne de confiance',
+    description: 'Découvrez notre sélection de produits de qualité à Niamey.',
     
     // ---------- MARQUE ----------
-    logo: 'assets/images/logo/default.png',
-    favicon: 'assets/favicon-96x96.png',
+    logo: 'https://placehold.co/200x200/E05206/white?text=Demo',
+    favicon: 'https://placehold.co/96x96/E05206/white?text=Demo',
     primaryColor: '#E05206',
     secondaryColor: '#1B6B93',
     
     // ---------- CONTACT ----------
     whatsapp: '22786762903',
-    whatsappMessage: 'Bonjour Niamey Market Hub !',
-    email: 'contact@niameymarkethub.com',
-    phone: '+227 86 76 29 03',
+    whatsappMessage: 'Bonjour, je viens de visiter votre boutique !',
+    email: 'contact@maboutique.com',
+    phone: '+227 00 00 00 00',
     address: 'Niamey, Niger',
     googleMaps: '#',
     
@@ -39,144 +35,82 @@ const SHOP_CONFIG = {
     developerAddress: 'Tchangarey, Marché de Bétail, Niamey (Niger)',
     developerWhatsapp: '22786762903',
     developerEmail: 'contact@hamglobalwords.com',
-    developerLogo: 'assets/images/logo/logoHAM.png',
+    developerLogo: '',
     
     // ---------- CATÉGORIES ----------
     categories: [
-        { key: 'categorie-1', label: 'Catégorie 1' },
-        { key: 'categorie-2', label: 'Catégorie 2' },
-        { key: 'categorie-3', label: 'Catégorie 3' }
+        { key: 'electronique', label: 'Électronique' },
+        { key: 'mode', label: 'Mode' },
+        { key: 'maison', label: 'Maison' }
     ],
     
     // ---------- PRODUITS ----------
     products: [
         {
-            id: 'default-1',
-            name: 'Produit exemple 1',
-            category: 'categorie-1',
+            id: 'demo-1',
+            name: 'Smartphone Pro X',
+            category: 'electronique',
             condition: 'new',
-            price: 15000,
-            oldPrice: 20000,
-            thumbnail: 'https://placehold.co/600x400?text=Produit+1',
-            description: 'Description du produit exemple.',
-            rating: 4.5,
-            stock: 10,
-            available: true
+            price: 150000,
+            oldPrice: 180000,
+            thumbnail: 'https://placehold.co/600x400/orange/white?text=Smartphone',
+            description: 'Smartphone dernière génération avec 128Go de stockage, appareil photo 48MP et batterie longue durée.',
+            rating: 4.5
         },
         {
-            id: 'default-2',
-            name: 'Produit exemple 2',
-            category: 'categorie-2',
-            condition: 'used',
-            price: 8500,
+            id: 'demo-2',
+            name: 'Robe traditionnelle Wax',
+            category: 'mode',
+            condition: 'new',
+            price: 25000,
             oldPrice: null,
-            thumbnail: 'https://placehold.co/600x400?text=Produit+2',
-            description: 'Description du produit exemple.',
-            rating: 4.0,
-            stock: 5,
-            available: true
+            thumbnail: 'https://placehold.co/600x400/1B6B93/white?text=Robe',
+            description: 'Magnifique robe en wax authentique, fabrication artisanale, disponible en plusieurs tailles.',
+            rating: 4.8
+        },
+        {
+            id: 'demo-3',
+            name: 'Table basse design',
+            category: 'maison',
+            condition: 'used',
+            price: 35000,
+            oldPrice: 50000,
+            thumbnail: 'https://placehold.co/600x400/8B4513/white?text=Table',
+            description: 'Table basse en bois massif, très bon état, idéale pour votre salon.',
+            rating: 4.0
+        },
+        {
+            id: 'demo-4',
+            name: 'Ordinateur portable reconditionné',
+            category: 'electronique',
+            condition: 'refurbished',
+            price: 200000,
+            oldPrice: 300000,
+            thumbnail: 'https://placehold.co/600x400/333/white?text=PC',
+            description: 'PC portable Core i5, 8Go RAM, 256Go SSD, écran 15 pouces, garantie 6 mois.',
+            rating: 4.3
+        },
+        {
+            id: 'demo-5',
+            name: 'Chaussures en cuir',
+            category: 'mode',
+            condition: 'new',
+            price: 18000,
+            oldPrice: 22000,
+            thumbnail: 'https://placehold.co/600x400/654321/white?text=Chaussures',
+            description: 'Chaussures en cuir véritable, fabrication artisanale, confort garanti.',
+            rating: 4.6
+        },
+        {
+            id: 'demo-6',
+            name: 'Canapé 3 places',
+            category: 'maison',
+            condition: 'new',
+            price: 120000,
+            oldPrice: null,
+            thumbnail: 'https://placehold.co/600x400/2F4F4F/white?text=Canape',
+            description: 'Canapé confortable 3 places, tissu résistant, coloris au choix.',
+            rating: 4.2
         }
-    ],
-
-    /**
-     * Valide la configuration
-     * @returns {Object} { valid: boolean, errors: string[] }
-     */
-    validate() {
-        const errors = [];
-        
-        // Champs obligatoires
-        const requiredStrings = ['slug', 'name', 'tagline'];
-        requiredStrings.forEach(field => {
-            if (!this[field] || typeof this[field] !== 'string') {
-                errors.push(`Champ requis manquant: ${field}`);
-            }
-        });
-        
-        // Validation slug
-        if (this.slug && !/^[a-z0-9-]+$/.test(this.slug)) {
-            errors.push('Slug invalide (lettres minuscules, chiffres, tirets uniquement)');
-        }
-        
-        // Validation couleurs
-        const colorRegex = /^#[0-9A-Fa-f]{6}$/;
-        if (this.primaryColor && !colorRegex.test(this.primaryColor)) {
-            errors.push('primaryColor doit être une couleur hex valide (#RRGGBB)');
-        }
-        if (this.secondaryColor && !colorRegex.test(this.secondaryColor)) {
-            errors.push('secondaryColor doit être une couleur hex valide (#RRGGBB)');
-        }
-        
-        // Validation WhatsApp
-        if (this.whatsapp && !/^\d{8,15}$/.test(this.whatsapp.replace(/[\s+]/g, ''))) {
-            errors.push('Numéro WhatsApp invalide');
-        }
-        
-        // Validation email
-        if (this.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
-            errors.push('Email invalide');
-        }
-        
-        // Validation produits
-        if (!Array.isArray(this.products)) {
-            errors.push('products doit être un tableau');
-        } else {
-            this.products.forEach((product, index) => {
-                if (!product.id) errors.push(`Produit #${index + 1}: id requis`);
-                if (!product.name) errors.push(`Produit #${index + 1}: name requis`);
-                if (typeof product.price !== 'number' || product.price < 0) {
-                    errors.push(`Produit #${index + 1}: price invalide`);
-                }
-                if (product.rating && (product.rating < 0 || product.rating > 5)) {
-                    errors.push(`Produit #${index + 1}: rating doit être entre 0 et 5`);
-                }
-                if (product.condition && !['new', 'used', 'refurbished'].includes(product.condition)) {
-                    errors.push(`Produit #${index + 1}: condition invalide (new, used, refurbished)`);
-                }
-            });
-        }
-        
-        // Validation catégories
-        if (!Array.isArray(this.categories)) {
-            errors.push('categories doit être un tableau');
-        } else {
-            const categoryKeys = this.categories.map(c => c.key);
-            this.products.forEach((product, index) => {
-                if (product.category && !categoryKeys.includes(product.category)) {
-                    errors.push(`Produit #${index + 1}: catégorie "${product.category}" non définie`);
-                }
-            });
-        }
-        
-        return {
-            valid: errors.length === 0,
-            errors
-        };
-    },
-
-    /**
-     * Retourne un produit par son ID
-     */
-    getProduct(productId) {
-        return this.products.find(p => p.id === productId) || null;
-    },
-
-    /**
-     * Retourne les produits d'une catégorie
-     */
-    getProductsByCategory(categoryKey) {
-        return this.products.filter(p => p.category === categoryKey);
-    },
-
-    /**
-     * Retourne les produits en promotion
-     */
-    getDiscountedProducts() {
-        return this.products.filter(p => p.oldPrice && p.oldPrice > p.price);
-    }
+    ]
 };
-
-// Exporter pour les modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { SHOP_CONFIG };
-}
