@@ -1,0 +1,86 @@
+let deferredPrompt = null;
+
+function isAppInstalled() {
+    return window.matchMedia('(display-mode: standalone)').matches ||
+           window.matchMedia('(display-mode: fullscreen)').matches;
+}
+
+function showInstallBanner() {
+    if (document.getElementById('pwa-install-banner')) return;
+    const banner = document.createElement('div');
+    banner.id = 'pwa-install-banner';
+    banner.innerHTML = `
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:2rem;">📲</span>
+                <div>
+                    <strong>${t('installTitle')}</strong>
+                    <span style="display:block; font-size:0.85rem;">${t('installSubtitle')}</span>
+                </div>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <button id="pwa-install-btn" class="btn btn-primary btn-sm">${t('installBtn')}</button>
+                <button id="pwa-dismiss-btn" class="btn btn-outline btn-sm">${t('later')}</button>
+            </div>
+        </div>`;
+    banner.style.cssText = 'position:fixed; bottom:16px; left:16px; right:16px; background:var(--surface); border-radius:var(--radius-lg); box-shadow:var(--shadow-xl); padding:16px; z-index:9999; border:1px solid var(--border); max-width:550px; margin:0 auto;';
+    document.body.appendChild(banner);
+
+    document.getElementById('pwa-install-btn').addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const result = await deferredPrompt.userChoice;
+            deferredPrompt = null;
+        } else if (isIOS()) {
+            showIOSInstructions();
+        }
+        if (banner.parentNode) banner.remove();
+    });
+
+    document.getElementById('pwa-dismiss-btn').addEventListener('click', () => {
+        if (banner.parentNode) banner.remove();
+        localStorage.setItem('installBannerDismissedAt', Date.now());
+    });
+}
+
+function showIOSInstructions() {
+    const msg = document.createElement('div');
+    msg.innerHTML = `
+        <div style="position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:10000; display:flex; align-items:center; justify-content:center;">
+            <div style="background:white; border-radius:20px; padding:24px; max-width:300px; text-align:center;">
+                <p style="font-size:1.5rem; margin-bottom:16px;">📲</p>
+                <p><strong>${t('iosInstallStep1')}</strong></p>
+                <p style="font-size:0.9rem;">${t('iosInstallStep2')}</p>
+                <p style="font-size:0.9rem;">${t('iosInstallStep3')}</p>
+                <button class="btn btn-primary btn-block" onclick="this.closest('div').parentElement.remove()">${t('close')}</button>
+            </div>
+        </div>`;
+    document.body.appendChild(msg);
+}
+
+function isIOS() {
+    return /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+}
+
+function initInstallBanner() {
+    if (isAppInstalled()) return;
+    const dismissedAt = localStorage.getItem('installBannerDismissedAt');
+    if (dismissedAt) {
+        const hoursSince = (Date.now() - parseInt(dismissedAt)) / (1000 * 60 * 60);
+        if (hoursSince < 72) return;
+    }
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        showInstallBanner();
+    });
+    setTimeout(() => {
+        if (!isAppInstalled() && !document.getElementById('pwa-install-banner')) showInstallBanner();
+    }, 2000);
+}
+
+window.addEventListener('appinstalled', () => {
+    const banner = document.getElementById('pwa-install-banner');
+    if (banner) banner.remove();
+    localStorage.removeItem('installBannerDismissedAt');
+});
