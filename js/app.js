@@ -1,6 +1,6 @@
 // ==========================================
 // app.js – Point d'entrée principal
-// Version 3.0 – Compatible avec tous les modules
+// Version 3.1 – Corrigée
 // ==========================================
 
 (function() {
@@ -10,11 +10,12 @@
         // 1. Charger la config boutique
         const config = loadShopConfig();
         window.SHOP_CONFIG = config;
-        document.title = config.shopName || config.name || 'Niamey Market Hub';
+        document.title = config.name || 'Niamey Market Hub';
+        console.log('✅ Config chargée:', config.name);
 
         // 2. Initialiser i18n
         I18n.init();
-        const langSelector = document.getElementById('lang-selector');
+        var langSelector = document.getElementById('lang-selector');
         if (langSelector) {
             langSelector.value = I18n.lang;
             langSelector.addEventListener('change', function() {
@@ -46,7 +47,7 @@
         document.getElementById('product-modal').addEventListener('click', function(e) { if (e.target === this) UI.closeModal('product-modal'); });
         document.getElementById('cart-modal').addEventListener('click', function(e) { if (e.target === this) UI.closeModal('cart-modal'); });
 
-        // 8. Échap pour fermer
+        // 8. Échap
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 UI.closeModal('product-modal');
@@ -55,20 +56,11 @@
         });
 
         console.log('✅ Application prête !');
-        console.log('📦 ' + ((config.products || []).length) + ' produits chargés');
-        console.log('🏪 ' + (config.shopName || config.name));
+        console.log('📦 ' + ((config.products || []).length) + ' produits');
+        console.log('🏪 ' + config.name);
 
     } catch (error) {
         console.error('❌ Erreur:', error);
-        document.getElementById('app').innerHTML = `
-            <div style="text-align:center;padding:60px 20px;">
-                <p style="font-size:3rem;">⚠️</p>
-                <h2>Erreur lors du chargement</h2>
-                <p style="color:var(--text-light);">${error.message}</p>
-                <button class="btn btn-primary" onclick="location.reload()" style="margin-top:16px;">
-                    🔄 Réessayer
-                </button>
-            </div>
-        `;
+        document.getElementById('app').innerHTML = '<div style="text-align:center;padding:60px 20px;"><p style="font-size:3rem;">⚠️</p><h2>Erreur</h2><p>' + error.message + '</p><button class="btn btn-primary" onclick="location.reload()" style="margin-top:16px;">🔄 Réessayer</button></div>';
     }
 })();
