@@ -1,62 +1,395 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=src/index.html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#E05206">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="description" content="Niamey Market Hub – Plateforme de boutiques en ligne">
+    <meta property="og:title" content="Niamey Market Hub">
+    <meta property="og:description" content="Votre marketplace multi-boutiques">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/png" sizes="96x96" href="https://placehold.co/96x96/E05206/white?text=NMH">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
     <title>Niamey Market Hub</title>
+    
     <style>
-        body {
-            font-family: system-ui, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background: #f5f5f5;
+        /* ========== RESET ========== */
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --primary:#E05206;--secondary:#1B6B93;--bg:#f8f9fa;--surface:#fff;
+            --text:#1a1a2e;--text-light:#6c757d;--border:#dee2e6;
+            --shadow:0 2px 10px rgba(0,0,0,.08);--shadow-lg:0 8px 30px rgba(0,0,0,.12);
+            --radius:16px;--radius-sm:10px;--font:system-ui,-apple-system,sans-serif;--transition:.25s ease
         }
-        .redirect-box {
-            text-align: center;
-            padding: 40px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            max-width: 400px;
+        body.dark{--bg:#121212;--surface:#1e1e1e;--text:#e0e0e0;--text-light:#a0a0a0;--border:#333}
+        body.contrast{--bg:#000;--surface:#000;--text:#fff;--text-light:#ff0;--border:#fff;--primary:#f60;--secondary:#0ff}
+        body{
+            font-family:var(--font);background:var(--bg);color:var(--text);
+            line-height:1.6;min-height:100vh;transition:background var(--transition),color var(--transition);padding-top:72px
         }
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #ddd;
-            border-top-color: #E05206;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 20px;
+        /* BANNER */
+        .banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:linear-gradient(135deg,var(--primary),#ff8c42);color:#fff;padding:6px 0;overflow:hidden;font-size:13px;font-weight:600}
+        .banner-text{animation:scroll 20s linear infinite;white-space:nowrap;padding-left:100%}
+        @keyframes scroll{to{transform:translateX(-100%)}}
+        /* TOOLBAR */
+        .toolbar{position:fixed;top:28px;left:0;right:0;z-index:999;display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px}
+        .toolbar-select{padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font);font-size:13px}
+        .toolbar-btn{padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-size:13px;transition:var(--transition)}
+        .toolbar-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+        .cart-count{background:var(--primary);color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;margin-left:4px;font-weight:700}
+        /* SHOP HEADER */
+        .shop-header{text-align:center;padding:40px 20px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
+        .shop-logo{width:100px;height:100px;border-radius:50%;border:4px solid #fff;object-fit:cover;margin-bottom:15px}
+        .shop-name{font-size:28px;font-weight:700;margin-bottom:5px}
+        .shop-tagline{font-size:16px;opacity:.9}
+        /* FILTERS */
+        .filters{display:flex;gap:10px;padding:16px 20px;flex-wrap:wrap;align-items:center;max-width:1100px;margin:0 auto}
+        .filters select{padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font);font-size:14px}
+        .product-count{margin-left:auto;color:var(--text-light);font-size:14px}
+        /* PRODUCT GRID */
+        .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;padding:0 20px 40px;max-width:1100px;margin:0 auto}
+        .product-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:var(--transition)}
+        .product-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+        .product-img-wrap{position:relative;height:220px;background:var(--bg)}
+        .product-img{width:100%;height:100%;object-fit:cover}
+        .product-badge{position:absolute;top:10px;right:10px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase}
+        .badge-new{background:#28a745;color:#fff}.badge-used{background:var(--secondary);color:#fff}.badge-refurbished{background:#6f42c1;color:#fff}
+        .product-info{padding:16px}
+        .product-name{font-size:16px;font-weight:600;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .product-price{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+        .price-current{font-size:20px;font-weight:700;color:var(--primary)}
+        .price-old{font-size:13px;color:var(--text-light);text-decoration:line-through}
+        .discount-badge{font-size:12px;color:#28a745;font-weight:600}
+        .product-rating{color:#ffc107;font-size:13px}
+        .product-rating span{color:var(--text-light);margin-left:4px}
+        /* BUTTONS */
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border-radius:var(--radius-sm);font-family:var(--font);font-size:15px;font-weight:600;border:none;cursor:pointer;text-decoration:none;transition:var(--transition)}
+        .btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{opacity:.9}
+        .btn-whatsapp{background:#25D366;color:#fff;width:100%}.btn-whatsapp:hover{background:#1da851}
+        .btn-outline{background:transparent;border:2px solid var(--primary);color:var(--primary)}.btn-outline:hover{background:var(--primary);color:#fff}
+        .btn-sm{padding:8px 16px;font-size:13px}.btn-block{display:flex;width:100%}
+        /* MODAL */
+        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px}
+        .modal{background:var(--surface);border-radius:var(--radius);padding:24px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;position:relative;animation:fadeIn .3s ease}
+        .modal-close{position:absolute;top:12px;right:16px;background:none;border:none;font-size:28px;cursor:pointer;color:var(--text);z-index:1}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        /* CART */
+        .cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+        .cart-item-img{width:60px;height:60px;border-radius:8px;object-fit:cover}
+        .cart-item-info{flex:1}.cart-item-name{font-weight:600;font-size:14px}.cart-item-price{color:var(--primary);font-weight:600}
+        .cart-qty{display:flex;align-items:center;gap:6px;margin-top:6px}
+        .cart-qty button{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-size:16px}
+        .cart-qty span{font-weight:600;min-width:20px;text-align:center}
+        .cart-remove{color:#dc3545;cursor:pointer;font-size:13px;margin-top:6px}
+        .cart-total{font-size:20px;font-weight:700;text-align:right;padding:16px 0}
+        .cart-empty{text-align:center;padding:30px;color:var(--text-light)}
+        /* WHATSAPP FLOAT */
+        .whatsapp-float{position:fixed;bottom:24px;right:24px;z-index:1500}
+        .whatsapp-btn{width:56px;height:56px;border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:var(--shadow-lg);text-decoration:none;transition:var(--transition)}
+        .whatsapp-btn:hover{transform:scale(1.1)}
+        /* TOAST */
+        .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:10px;color:#fff;font-size:14px;z-index:3000;animation:fadeIn .3s ease;box-shadow:var(--shadow-lg)}
+        .toast-success{background:#28a745}.toast-error{background:#dc3545}.toast-info{background:var(--secondary)}
+        /* FOOTER */
+        .footer{background:var(--surface);border-top:1px solid var(--border);padding:24px;text-align:center;font-size:13px;color:var(--text-light)}
+        .loading{padding:80px 20px;text-align:center;color:var(--text-light)}
+        /* RESPONSIVE */
+        @media(max-width:768px){
+            .shop-name{font-size:22px}
+            .product-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 12px 30px}
+            .product-img-wrap{height:160px}.product-name{font-size:14px}.price-current{font-size:16px}
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        h1 {
-            color: #E05206;
-            font-size: 24px;
-            margin: 0 0 10px;
-        }
-        p {
-            color: #666;
-            margin: 0 0 20px;
-        }
-        a {
-            color: #1B6B93;
-            text-decoration: none;
-            font-weight: bold;
+        @media(max-width:480px){
+            .product-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+            .product-img-wrap{height:140px}
         }
     </style>
 </head>
 <body>
-    <div class="redirect-box">
-        <div class="spinner"></div>
-        <h1>Niamey Market Hub</h1>
-        <p>Redirection vers la boutique...</p>
-        <p><a href="src/index.html">Cliquez ici si la redirection ne fonctionne pas</a></p>
+
+    <!-- BANNER -->
+    <div class="banner"><div class="banner-text">🚧 Site en construction – Fonctionnalités limitées 🚧</div></div>
+
+    <!-- TOOLBAR -->
+    <header class="toolbar">
+        <select id="lang-selector" class="toolbar-select">
+            <option value="fr">🇫🇷 FR</option>
+            <option value="en">🇬🇧 EN</option>
+        </select>
+        <div style="display:flex;gap:6px;">
+            <button id="theme-btn" class="toolbar-btn"><i class="fas fa-moon"></i></button>
+            <button id="contrast-btn" class="toolbar-btn"><i class="fas fa-adjust"></i></button>
+            <button id="font-minus" class="toolbar-btn">A-</button>
+            <button id="font-plus" class="toolbar-btn">A+</button>
+            <button id="cart-btn" class="toolbar-btn">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-count" class="cart-count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main id="app"><div class="loading">Chargement...</div></main>
+
+    <!-- FOOTER -->
+    <footer id="footer"></footer>
+
+    <!-- WHATSAPP -->
+    <div class="whatsapp-float">
+        <a href="#" target="_blank" rel="noopener" class="whatsapp-btn" id="whatsapp-link">
+            <i class="fab fa-whatsapp"></i>
+        </a>
     </div>
+
+    <!-- MODALS -->
+    <div class="modal-overlay" id="product-modal" style="display:none;">
+        <div class="modal">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="cart-modal" style="display:none;">
+        <div class="modal">
+            <button class="modal-close" id="cart-modal-close">&times;</button>
+            <div id="cart-modal-content"></div>
+        </div>
+    </div>
+    <div id="toast-container"></div>
+
+    <script>
+    // ==========================================
+    // NIAMEY MARKET HUB – APPLICATION COMPLÈTE
+    // ==========================================
+
+    // ---------- CONFIG ----------
+    const CONFIG = {
+        shopName: 'Ma Boutique Démo',
+        tagline: 'Votre boutique en ligne de confiance',
+        whatsapp: '22786762903',
+        whatsappMessage: 'Bonjour, je suis intéressé par vos produits !',
+        email: 'contact@maboutique.com',
+        phone: '+227 00 00 00 00',
+        address: 'Niamey, Niger',
+        developer: {
+            name: 'Hamadine AG MOCTAR',
+            title: 'Développeur full‑stack & CEO de HAM Global Words'
+        },
+        categories: [
+            { key: 'electronique', label: 'Électronique', icon: '📱' },
+            { key: 'mode', label: 'Mode', icon: '👗' },
+            { key: 'maison', label: 'Maison', icon: '🏠' },
+            { key: 'alimentation', label: 'Alimentation', icon: '🍎' }
+        ],
+        products: [
+            { id: '1', name: 'Smartphone Galaxy A54', category: 'electronique', condition: 'new', price: 185000, oldPrice: 220000, thumbnail: 'https://placehold.co/600x400/FF6B35/white?text=Galaxy+A54', description: 'Samsung Galaxy A54, 128Go, 8Go RAM, photo 50MP.', rating: 4.6, stock: 12 },
+            { id: '2', name: 'Robe Wax Authentique', category: 'mode', condition: 'new', price: 25000, oldPrice: null, thumbnail: 'https://placehold.co/600x400/1B6B93/white?text=Robe+Wax', description: 'Magnifique robe en wax, fabrication artisanale.', rating: 4.8, stock: 25 },
+            { id: '3', name: 'Table Basse Bois Massif', category: 'maison', condition: 'used', price: 35000, oldPrice: 50000, thumbnail: 'https://placehold.co/600x400/8B4513/white?text=Table+Basse', description: 'Table basse en très bon état, 120x60cm.', rating: 4.2, stock: 1 },
+            { id: '4', name: 'PC Portable Lenovo', category: 'electronique', condition: 'refurbished', price: 150000, oldPrice: 250000, thumbnail: 'https://placehold.co/600x400/333333/white?text=ThinkPad', description: 'Lenovo ThinkPad, Core i5, 16Go RAM, 512Go SSD.', rating: 4.4, stock: 3 },
+            { id: '5', name: 'Chaussures Cuir Italien', category: 'mode', condition: 'new', price: 22000, oldPrice: 28000, thumbnail: 'https://placehold.co/600x400/654321/white?text=Chaussures', description: 'Cuir véritable, pointures 38-45.', rating: 4.7, stock: 40 },
+            { id: '6', name: 'Canapé 3 Places Velours', category: 'maison', condition: 'new', price: 180000, oldPrice: null, thumbnail: 'https://placehold.co/600x400/800020/white?text=Canape', description: 'Canapé velours gris anthracite.', rating: 4.5, stock: 2 },
+            { id: '7', name: 'Riz Parfumé 25kg', category: 'alimentation', condition: 'new', price: 15000, oldPrice: null, thumbnail: 'https://placehold.co/600x400/DAA520/white?text=Riz+25kg', description: 'Riz parfumé qualité supérieure.', rating: 4.3, stock: 100 },
+            { id: '8', name: 'Casque Bluetooth Sony', category: 'electronique', condition: 'new', price: 45000, oldPrice: 60000, thumbnail: 'https://placehold.co/600x400/4A90D9/white?text=Sony+WH', description: 'Sony WH-1000XM4, ANC, 30h autonomie.', rating: 4.9, stock: 8 }
+        ]
+    };
+
+    // ---------- UTILS ----------
+    function formatPrice(p) { return p.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' FCFA'; }
+    function getDiscount(old, n) { if (!old || old <= n) return 0; return Math.round(((old - n) / old) * 100); }
+    function renderStars(r) { let h = ''; for (let i = 0; i < 5; i++) { if (i < Math.floor(r)) h += '<i class="fas fa-star"></i>'; else if (i === Math.floor(r) && r % 1 >= 0.5) h += '<i class="fas fa-star-half-alt"></i>'; else h += '<i class="far fa-star"></i>'; } return h; }
+    function condLabel(c) { const l = { new: 'Neuf', used: 'Occasion', refurbished: 'Reconditionné' }; return l[c] || c; }
+    function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    function toast(msg, type) { const c = document.getElementById('toast-container'); const t = document.createElement('div'); t.className = 'toast toast-' + (type || 'info'); t.textContent = msg; c.appendChild(t); setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; setTimeout(() => t.remove(), 300); }, 3000); }
+    function storage(key, value) { try { if (value === undefined) { const item = localStorage.getItem(key); return item ? JSON.parse(item) : null; } localStorage.setItem(key, JSON.stringify(value)); return true; } catch (e) { return null; } }
+
+    // ---------- I18N ----------
+    const I18n = {
+        lang: 'fr',
+        tr: {
+            fr: { all_categories: 'Toutes les catégories', sort_default: 'Par défaut', sort_price_asc: 'Prix croissant', sort_price_desc: 'Prix décroissant', sort_rating: 'Meilleure note', products: 'produits', no_results: 'Aucun produit', description: 'Description', order_whatsapp: 'Commander WhatsApp', add_to_cart: 'Ajouter au panier', cart: 'Panier', cart_empty: 'Panier vide', cart_total: 'Total', cart_clear: 'Vider', remove: 'Retirer', close: 'Fermer', developed_by: 'Développé par', loading: 'Chargement...' },
+            en: { all_categories: 'All categories', sort_default: 'Default', sort_price_asc: 'Price: low to high', sort_price_desc: 'Price: high to low', sort_rating: 'Best rating', products: 'products', no_results: 'No products', description: 'Description', order_whatsapp: 'Order via WhatsApp', add_to_cart: 'Add to cart', cart: 'Cart', cart_empty: 'Cart is empty', cart_total: 'Total', cart_clear: 'Clear', remove: 'Remove', close: 'Close', developed_by: 'Developed by', loading: 'Loading...' }
+        },
+        t(k) { return this.tr[this.lang]?.[k] || this.tr.fr[k] || k; },
+        setLang(l) { if (['fr', 'en'].includes(l)) { this.lang = l; storage('lang', l); } },
+        init() { const s = storage('lang'); if (s) this.lang = s; }
+    };
+
+    // ---------- THEME ----------
+    const Theme = {
+        dark: false, contrast: false, fs: 1,
+        init() { const s = storage('theme'); if (s) { this.dark = s.dark; this.contrast = s.contrast; this.fs = s.fs || 1; } this.apply(); },
+        apply() {
+            document.body.classList.toggle('dark', this.dark);
+            document.body.classList.toggle('contrast', this.contrast);
+            document.body.style.fontSize = (this.fs * 100) + '%';
+            const b = document.getElementById('theme-btn');
+            if (b) b.querySelector('i').className = this.dark ? 'fas fa-sun' : 'fas fa-moon';
+            storage('theme', { dark: this.dark, contrast: this.contrast, fs: this.fs });
+        },
+        toggle() { this.dark = !this.dark; this.apply(); },
+        toggleContrast() { this.contrast = !this.contrast; this.apply(); },
+        fontUp() { if (this.fs < 1.5) { this.fs += 0.1; this.apply(); } },
+        fontDown() { if (this.fs > 0.8) { this.fs -= 0.1; this.apply(); } }
+    };
+
+    // ---------- CART ----------
+    const Cart = {
+        items: [],
+        init() { const s = storage('cart'); if (s) this.items = s; this.updateBadge(); },
+        save() { storage('cart', this.items); this.updateBadge(); },
+        add(p) { const ex = this.items.find(i => i.id === p.id); if (ex) ex.quantity++; else this.items.push({ id: p.id, name: p.name, price: p.price, thumbnail: p.thumbnail, quantity: 1 }); this.save(); toast(p.name + ' ajouté !', 'success'); },
+        remove(id) { this.items = this.items.filter(i => i.id !== id); this.save(); },
+        updateQty(id, q) { const it = this.items.find(i => i.id === id); if (it) { it.quantity = Math.max(1, Math.min(99, q)); this.save(); } },
+        clear() { this.items = []; this.save(); },
+        total() { return this.items.reduce((s, i) => s + (i.price * i.quantity), 0); },
+        count() { return this.items.reduce((s, i) => s + i.quantity, 0); },
+        updateBadge() { const b = document.getElementById('cart-count'); if (b) { const c = this.count(); b.textContent = c; b.style.display = c > 0 ? 'inline' : 'none'; } },
+        whatsappMsg() {
+            let m = 'Bonjour, je souhaite commander :\n\n';
+            this.items.forEach((it, i) => { m += (i + 1) + '. *' + it.name + '*\n   Qté: ' + it.quantity + ' | Prix: ' + formatPrice(it.price) + '\n\n'; });
+            m += '*Total: ' + formatPrice(this.total()) + '*';
+            return encodeURIComponent(m);
+        }
+    };
+
+    // ---------- UI ----------
+    const UI = {
+        filterCat: 'all', filterSort: 'default',
+
+        init() { this.render(); this.renderFooter(); this.updateWhatsApp(); },
+
+        render() {
+            let prods = [...CONFIG.products];
+            if (this.filterCat !== 'all') prods = prods.filter(p => p.category === this.filterCat);
+            if (this.filterSort === 'price-asc') prods.sort((a, b) => a.price - b.price);
+            if (this.filterSort === 'price-desc') prods.sort((a, b) => b.price - a.price);
+            if (this.filterSort === 'rating') prods.sort((a, b) => b.rating - a.rating);
+
+            document.getElementById('app').innerHTML = `
+                <header class="shop-header">
+                    <img src="https://placehold.co/200x200/E05206/white?text=Shop" alt="Logo" class="shop-logo">
+                    <h1 class="shop-name">${esc(CONFIG.shopName)}</h1>
+                    <p class="shop-tagline">${esc(CONFIG.tagline)}</p>
+                </header>
+                <div class="filters">
+                    <select id="filter-cat"><option value="all">${I18n.t('all_categories')}</option>${CONFIG.categories.map(c => `<option value="${c.key}" ${UI.filterCat===c.key?'selected':''}>${c.icon} ${c.label}</option>`).join('')}</select>
+                    <select id="filter-sort"><option value="default" ${UI.filterSort==='default'?'selected':''}>${I18n.t('sort_default')}</option><option value="price-asc" ${UI.filterSort==='price-asc'?'selected':''}>${I18n.t('sort_price_asc')}</option><option value="price-desc" ${UI.filterSort==='price-desc'?'selected':''}>${I18n.t('sort_price_desc')}</option><option value="rating" ${UI.filterSort==='rating'?'selected':''}>${I18n.t('sort_rating')}</option></select>
+                    <span class="product-count">${prods.length} ${I18n.t('products')}</span>
+                </div>
+                <div class="product-grid">${prods.length === 0 ? '<div style="grid-column:1/-1;text-align:center;padding:60px;"><p style="font-size:4rem;">📦</p><p>' + I18n.t('no_results') + '</p></div>' : prods.map(p => `
+                    <article class="product-card" data-id="${p.id}">
+                        <div class="product-img-wrap">
+                            <img src="${p.thumbnail}" alt="${esc(p.name)}" class="product-img" loading="lazy" onerror="this.src='https://placehold.co/600x400/ccc/666?text=Image'">
+                            <span class="product-badge badge-${p.condition}">${condLabel(p.condition)}</span>
+                            ${getDiscount(p.oldPrice,p.price) > 0 ? '<span style="position:absolute;top:10px;left:10px;background:#dc3545;color:#fff;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:700;">-' + getDiscount(p.oldPrice,p.price) + '%</span>' : ''}
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">${esc(p.name)}</h3>
+                            <div class="product-price"><span class="price-current">${formatPrice(p.price)}</span>${p.oldPrice ? '<span class="price-old">' + formatPrice(p.oldPrice) + '</span>' : ''}</div>
+                            <div class="product-rating">${renderStars(p.rating)}<span>${p.rating}</span></div>
+                        </div>
+                    </article>`).join('')}</div>`;
+
+            // Events filtres
+            document.getElementById('filter-cat').onchange = function() { UI.filterCat = this.value; UI.render(); };
+            document.getElementById('filter-sort').onchange = function() { UI.filterSort = this.value; UI.render(); };
+
+            // Events cartes produits
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.onclick = function() { UI.openProduct(this.dataset.id); };
+            });
+        },
+
+        openProduct(id) {
+            const p = CONFIG.products.find(x => x.id === id);
+            if (!p) return;
+            const disc = getDiscount(p.oldPrice, p.price);
+            document.getElementById('modal-content').innerHTML = `
+                <img src="${p.thumbnail}" alt="${esc(p.name)}" style="width:100%;border-radius:12px;margin-bottom:16px;" onerror="this.src='https://placehold.co/600x400/ccc/666?text=Image'">
+                <span class="product-badge badge-${p.condition}">${condLabel(p.condition)}</span>${disc > 0 ? ' <span style="color:#dc3545;font-weight:700;">-' + disc + '%</span>' : ''}
+                <h2 style="margin:12px 0 8px;">${esc(p.name)}</h2>
+                <div class="product-rating" style="margin-bottom:12px;">${renderStars(p.rating)}<span>${p.rating}</span></div>
+                <div class="product-price" style="margin-bottom:12px;"><span class="price-current">${formatPrice(p.price)}</span>${p.oldPrice ? '<span class="price-old">' + formatPrice(p.oldPrice) + '</span>' : ''}</div>
+                ${p.description ? '<p style="color:var(--text-light);margin-bottom:12px;"><strong>' + I18n.t('description') + '</strong><br>' + esc(p.description) + '</p>' : ''}
+                ${p.stock !== undefined ? '<p style="margin-bottom:12px;color:' + (p.stock > 0 ? '#28a745' : '#dc3545') + ';">' + (p.stock > 0 ? '✅ ' + p.stock + ' en stock' : '❌ Rupture') + '</p>' : ''}
+                <button class="btn btn-primary btn-block" id="btn-add-cart">🛒 ${I18n.t('add_to_cart')}</button>
+                <a href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent('Bonjour, *' + p.name + '* à ' + formatPrice(p.price))}" target="_blank" rel="noopener" class="btn btn-whatsapp btn-block" style="margin-top:10px;">💬 ${I18n.t('order_whatsapp')}</a>`;
+            
+            document.getElementById('btn-add-cart').onclick = function() { Cart.add(p); };
+            document.getElementById('product-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        },
+
+        closeModal(id) { document.getElementById(id).style.display = 'none'; document.body.style.overflow = ''; },
+
+        openCart() {
+            const c = document.getElementById('cart-modal-content');
+            if (Cart.items.length === 0) {
+                c.innerHTML = '<h2>🛒 ' + I18n.t('cart') + '</h2><div class="cart-empty"><p style="font-size:3rem;">🛒</p><p>' + I18n.t('cart_empty') + '</p></div>';
+            } else {
+                c.innerHTML = '<h2>🛒 ' + I18n.t('cart') + ' (' + Cart.count() + ')</h2>' +
+                    Cart.items.map(it => `
+                        <div class="cart-item">
+                            <img src="${it.thumbnail}" alt="${esc(it.name)}" class="cart-item-img" onerror="this.src='https://placehold.co/100x100/ccc/666?text=Image'">
+                            <div class="cart-item-info">
+                                <div class="cart-item-name">${esc(it.name)}</div>
+                                <div class="cart-item-price">${formatPrice(it.price)}</div>
+                                <div class="cart-qty">
+                                    <button onclick="Cart.updateQty('${it.id}',${it.quantity-1});UI.openCart();">−</button>
+                                    <span>${it.quantity}</span>
+                                    <button onclick="Cart.updateQty('${it.id}',${it.quantity+1});UI.openCart();">+</button>
+                                </div>
+                                <div class="cart-remove" onclick="Cart.remove('${it.id}');UI.openCart();">🗑️ ${I18n.t('remove')}</div>
+                            </div>
+                        </div>`).join('') +
+                    '<div class="cart-total">' + I18n.t('cart_total') + ' : ' + formatPrice(Cart.total()) + '</div>' +
+                    '<a href="https://wa.me/' + CONFIG.whatsapp + '?text=' + Cart.whatsappMsg() + '" target="_blank" rel="noopener" class="btn btn-whatsapp btn-block">💬 Commander</a>' +
+                    '<button class="btn btn-outline btn-block" style="margin-top:8px;" onclick="Cart.clear();UI.openCart();">🗑️ ' + I18n.t('cart_clear') + '</button>';
+            }
+            document.getElementById('cart-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        },
+
+        renderFooter() {
+            document.getElementById('footer').innerHTML = '<div class="footer"><p><strong>' + esc(CONFIG.shopName) + '</strong></p><p>📍 ' + esc(CONFIG.address) + '</p><p>📞 ' + esc(CONFIG.phone) + '</p><p style="margin-top:12px;">' + I18n.t('developed_by') + ' <strong>' + esc(CONFIG.developer.name) + '</strong></p></div>';
+        },
+
+        updateWhatsApp() {
+            document.getElementById('whatsapp-link').href = 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(CONFIG.whatsappMessage);
+        }
+    };
+
+    // ---------- APP ----------
+    (function() {
+        I18n.init();
+        document.getElementById('lang-selector').value = I18n.lang;
+        Theme.init();
+        Cart.init();
+        document.title = CONFIG.shopName;
+
+        // Theme events
+        document.getElementById('theme-btn').onclick = function() { Theme.toggle(); };
+        document.getElementById('contrast-btn').onclick = function() { Theme.toggleContrast(); };
+        document.getElementById('font-plus').onclick = function() { Theme.fontUp(); };
+        document.getElementById('font-minus').onclick = function() { Theme.fontDown(); };
+
+        // Cart event
+        document.getElementById('cart-btn').onclick = function() { UI.openCart(); };
+
+        // Modal close
+        document.getElementById('modal-close').onclick = function() { UI.closeModal('product-modal'); };
+        document.getElementById('cart-modal-close').onclick = function() { UI.closeModal('cart-modal'); };
+        document.getElementById('product-modal').onclick = function(e) { if (e.target === this) UI.closeModal('product-modal'); };
+        document.getElementById('cart-modal').onclick = function(e) { if (e.target === this) UI.closeModal('cart-modal'); };
+
+        // Langue
+        document.getElementById('lang-selector').onchange = function() { I18n.setLang(this.value); UI.render(); UI.renderFooter(); };
+
+        // Render
+        UI.init();
+    })();
+    </script>
 </body>
 </html>
