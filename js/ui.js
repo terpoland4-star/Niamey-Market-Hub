@@ -431,7 +431,7 @@ const UI = {
 
     // ---------- FOOTER ----------
     renderFooter() {
-        const footer = document.getElementById('footer-app');
+        const footer = document.getElementById('footer');
         if (!footer || !this.config) return;
 
         const config = this.config;
