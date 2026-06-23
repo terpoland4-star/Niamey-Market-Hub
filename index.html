@@ -3,226 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    
-    <!-- Métadonnées de base -->
     <meta name="theme-color" content="#E05206">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Market Hub">
-    <meta name="description" content="Plateforme de boutiques en ligne - Niamey Market Hub">
+    <meta name="description" content="Niamey Market Hub – Plateforme de boutiques en ligne">
     <meta name="author" content="HAM Global Words">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Open Graph -->
     <meta property="og:title" content="Niamey Market Hub">
-    <meta property="og:description" content="Plateforme de boutiques en ligne">
+    <meta property="og:description" content="Votre marketplace multi-boutiques">
     <meta property="og:type" content="website">
-    <meta property="og:locale" content="fr_FR">
-    <meta property="og:site_name" content="Niamey Market Hub">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Niamey Market Hub">
-    <meta name="twitter:description" content="Plateforme de boutiques en ligne">
-    
-    <!-- Icônes -->
-    <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-180x180.png">
-    
-    <!-- Préchargements -->
+    <link rel="icon" type="image/png" sizes="96x96" href="https://placehold.co/96x96/E05206/white?text=NMH">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="preconnect" href="https://cdn.onesignal.com">
-    
-    <!-- Préchargement des ressources critiques -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
-          crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/styles.css">
-    
-    <!-- Manifest PWA -->
     <link rel="manifest" href="manifest.json">
-    
-    <!-- OneSignal (optionnel - décommenter pour activer) -->
-    <!--
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    -->
-    
     <title>Niamey Market Hub</title>
 </head>
 <body>
-    <!-- Fallback si JavaScript désactivé -->
     <noscript>
-        <div style="
-            padding: 40px;
-            text-align: center;
-            font-family: system-ui, sans-serif;
-            background: #fff3cd;
-            color: #856404;
-            border-bottom: 3px solid #ffc107;
-        ">
+        <div style="padding:40px;text-align:center;background:#fff3cd;color:#856404;">
             <h2>⚠️ JavaScript requis</h2>
-            <p>Cette application nécessite JavaScript pour fonctionner.</p>
-            <p>Veuillez activer JavaScript dans les paramètres de votre navigateur.</p>
+            <p>Cette application nécessite JavaScript.</p>
         </div>
     </noscript>
 
-    <!-- Bannière défilante -->
-    <div class="construction-banner" role="marquee" aria-live="polite">
-        <div class="construction-banner__text" id="banner-text">
-            🚧 Site en construction – Certaines fonctionnalités peuvent être limitées 🚧
-        </div>
+    <div class="banner">
+        <div class="banner-text">🚧 Site en construction – Fonctionnalités limitées 🚧</div>
     </div>
 
-    <!-- Barre d'outils d'accessibilité -->
-    <header class="toolbar" role="toolbar" aria-label="Outils d'accessibilité">
-        <div class="toolbar-left">
-            <label for="lang-selector" class="sr-only">Choisir la langue</label>
-            <select id="lang-selector" class="toolbar-select" aria-label="Langue">
-                <option value="fr">🇫🇷 Français</option>
-                <option value="en">🇬🇧 English</option>
-            </select>
-        </div>
-        <div class="toolbar-right">
-            <button id="theme-toggle" class="toolbar-btn" title="Mode sombre" aria-label="Basculer le mode sombre">
-                <i class="fas fa-moon" aria-hidden="true"></i>
-            </button>
-            <button id="high-contrast-toggle" class="toolbar-btn" title="Contraste élevé" aria-label="Basculer le contraste élevé">
-                <i class="fas fa-adjust" aria-hidden="true"></i>
-            </button>
-            <button id="font-decrease" class="toolbar-btn" title="Texte plus petit" aria-label="Diminuer la taille du texte">A−</button>
-            <button id="font-increase" class="toolbar-btn" title="Texte plus grand" aria-label="Augmenter la taille du texte">A+</button>
-            <button id="font-reset" class="toolbar-btn" title="Réinitialiser" aria-label="Réinitialiser la taille du texte">
-                <i class="fas fa-undo-alt" aria-hidden="true"></i>
+    <header class="toolbar">
+        <select id="lang-selector" class="toolbar-select">
+            <option value="fr">🇫🇷 FR</option>
+            <option value="en">🇬🇧 EN</option>
+        </select>
+        <div style="display:flex;gap:6px;">
+            <button id="theme-btn" class="toolbar-btn"><i class="fas fa-moon"></i></button>
+            <button id="contrast-btn" class="toolbar-btn"><i class="fas fa-adjust"></i></button>
+            <button id="font-minus" class="toolbar-btn">A-</button>
+            <button id="font-plus" class="toolbar-btn">A+</button>
+            <button id="cart-btn" class="toolbar-btn">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-count">0</span>
             </button>
         </div>
     </header>
 
-    <!-- Conteneur principal de l'application -->
-    <main id="app" role="main">
-        <!-- Rendu dynamique par ui.js -->
-        <div class="loading">
-            <div class="loading-spinner" aria-label="Chargement en cours"></div>
-            <p>Chargement de la boutique...</p>
-        </div>
+    <main id="app">
+        <div class="loading">Chargement...</div>
     </main>
 
-    <!-- Footer -->
-    <footer id="footer-app" role="contentinfo">
-        <!-- Rendu dynamique par ui.js -->
-    </footer>
+    <footer id="footer"></footer>
 
-    <!-- Bouton WhatsApp flottant -->
-    <div class="whatsapp-float" id="whatsappFloat" aria-label="Contact WhatsApp">
-        <div class="whatsapp-float__bubble" id="whatsappBubble" aria-hidden="true">Besoin d'aide ?</div>
-        <a href="#" target="_blank" rel="noopener noreferrer" class="whatsapp-float__btn" id="whatsappLink" 
-           aria-label="Contacter via WhatsApp">
-            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+    <div class="whatsapp-float">
+        <a href="#" target="_blank" rel="noopener" class="whatsapp-btn" id="whatsapp-link">
+            <i class="fab fa-whatsapp"></i>
         </a>
     </div>
 
-    <!-- ==========================================
-         SCRIPTS - Ordre de chargement optimisé
-         Tous en mode module pour cohérence
-         ========================================== -->
-    
-    <!-- Fondations (non-module pour compatibilité) -->
-    <script src="js/utils.js" defer></script>
-    
-    <!-- i18n et config (dépendances pour le reste) -->
-    <script src="js/i18n.js" defer></script>
-    <script src="js/shop-config.js" defer></script>
-    
-    <!-- Modules ES6 -->
-    <script type="module">
-        // Importer les modules dans l'ordre
-        import './js/api.js';
-        import './js/auth.js';
-        import './js/theme.js';
-        import './js/cart.js';
-        import './js/payments.js';
-        import './js/install.js';
-        import './js/shop-loader.js';
-        import './js/ui.js';
-        import './js/app.js';
-    </script>
+    <div class="modal-overlay" id="product-modal" style="display:none;">
+        <div class="modal">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
 
-    <!-- Fallback pour navigateurs sans support modules -->
-    <script nomodule>
-        console.warn('Votre navigateur ne supporte pas les modules ES6. Certaines fonctionnalités peuvent être limitées.');
-        
-        // Charger les scripts de manière traditionnelle
-        const scripts = [
-            'js/api.js',
-            'js/auth.js',
-            'js/theme.js',
-            'js/cart.js',
-            'js/payments.js',
-            'js/install.js',
-            'js/shop-loader.js',
-            'js/ui.js',
-            'js/app.js'
-        ];
-        
-        scripts.forEach(src => {
-            const script = document.createElement('script');
-            script.src = src;
-            script.defer = true;
-            document.body.appendChild(script);
-        });
-    </script>
+    <div class="modal-overlay" id="cart-modal" style="display:none;">
+        <div class="modal">
+            <button class="modal-close" id="cart-modal-close">&times;</button>
+            <div id="cart-modal-content"></div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <!-- SCRIPTS – ORDRE CRITIQUE -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/shop-loader.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
 
     <!-- Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js', { scope: '/' })
-                    .then(registration => {
-                        console.log('✅ Service Worker enregistré:', registration.scope);
-                        
-                        // Vérifier les mises à jour
-                        registration.addEventListener('updatefound', () => {
-                            const newWorker = registration.installing;
-                            console.log('🔄 Nouveau Service Worker trouvé');
-                            
-                            newWorker.addEventListener('statechange', () => {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    console.log('🆕 Nouvelle version disponible - actualisez la page');
-                                    // Optionnel : afficher une notification à l'utilisateur
-                                }
-                            });
-                        });
-                    })
-                    .catch(err => {
-                        console.error('❌ Erreur Service Worker:', err);
-                    });
-            });
+            navigator.serviceWorker.register('sw.js').catch(function() {});
         }
     </script>
-
-    <!-- OneSignal Initialisation (optionnel) -->
-    <!--
-    <script>
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-        OneSignalDeferred.push(function(OneSignal) {
-            OneSignal.init({
-                appId: "YOUR_ONESIGNAL_APP_ID",
-                notifyButton: {
-                    enable: false
-                },
-                allowLocalhostAsSecureOrigin: true,
-                serviceWorkerParam: { scope: '/' },
-                serviceWorkerPath: 'OneSignalSDKWorker.js'
-            });
-        });
-    </script>
-    -->
 </body>
 </html>
