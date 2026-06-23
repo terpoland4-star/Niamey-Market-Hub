@@ -3,26 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Config</title>
+    <title>Test</title>
 </head>
 <body>
-    <h1>Test config.js</h1>
-    <div id="result">Chargement...</div>
+    <h1>Test fichiers JS</h1>
+    <div id="result"></div>
 
-    <script src="js/config.js"></script>
+    <script src="js/shop-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/shop-loader.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+    
     <script>
-        try {
-            if (typeof CONFIG !== 'undefined' && CONFIG.shopName) {
-                document.getElementById('result').innerHTML = 
-                    '<p style="color:green;">✅ config.js OK - ' + CONFIG.shopName + ' - ' + CONFIG.products.length + ' produits</p>';
+        var files = ['SHOP_CONFIG', 'formatPrice', 'I18n', 'Theme', 'Cart', 'loadShopConfig', 'UI'];
+        var html = '';
+        files.forEach(function(f) {
+            if (typeof window[f] !== 'undefined' || typeof eval(f) !== 'undefined') {
+                html += '<p style="color:green;">✅ ' + f + ' OK</p>';
             } else {
-                document.getElementById('result').innerHTML = 
-                    '<p style="color:red;">❌ CONFIG non trouvé</p>';
+                html += '<p style="color:red;">❌ ' + f + ' NON TROUVÉ</p>';
             }
-        } catch(e) {
-            document.getElementById('result').innerHTML = 
-                '<p style="color:red;">❌ Erreur: ' + e.message + '</p>';
-        }
+        });
+        document.getElementById('result').innerHTML = html;
     </script>
 </body>
 </html>
