@@ -1,6 +1,6 @@
-// pages.js – Vues de l'application (Priorité 2 – Design amélioré)
+// pages.js – Vues de l'application (Thème Marché de Niamey)
 
-// ---------- HOME (avec recherche et catégories) ----------
+// ---------- HOME (nouveau thème) ----------
 function renderHome(app) {
   const products = DB.getProducts();
   const searchQuery = Router.params.query?.get('search')?.toLowerCase() || '';
@@ -14,13 +14,11 @@ function renderHome(app) {
 
   app.innerHTML = `
     <div class="page">
-      <!-- Hero -->
       <div class="hero">
-        <h1>Bienvenue sur Niamey Market Hub</h1>
-        <p>Trouvez les meilleurs produits près de chez vous</p>
+        <h1>Niamey Market Hub</h1>
+        <p>Le goût du marché, la confiance du digital</p>
       </div>
 
-      <!-- Catégories -->
       <div class="categories-section">
         <div class="category-chip ${categoryFilter==='all'?'active':''}" data-category="all">Tout</div>
         ${categories.map(cat => `
@@ -28,13 +26,12 @@ function renderHome(app) {
         `).join('')}
       </div>
 
-      <!-- Barre de recherche -->
       <div class="search-bar">
         <input type="text" id="home-search" placeholder="Rechercher un produit..." value="${searchQuery.replace(/"/g,'&quot;')}">
         <button class="btn btn-primary" id="btn-search">🔍</button>
       </div>
 
-      <h3>Produits disponibles</h3>
+      <h3 style="font-family:var(--font-heading); margin-bottom:12px;">Produits disponibles</h3>
       <div class="product-grid">
         ${filtered.length === 0 ? '<p style="grid-column:1/-1;text-align:center;">Aucun produit trouvé.</p>' : filtered.map(p => `
           <div class="product-card" onclick="Router.navigate('product/${p.id}')">
@@ -47,7 +44,6 @@ function renderHome(app) {
     </div>
   `;
 
-  // Gestion des clics sur les catégories
   document.querySelectorAll('.category-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const cat = chip.dataset.category;
@@ -57,7 +53,6 @@ function renderHome(app) {
     });
   });
 
-  // Recherche
   document.getElementById('btn-search').addEventListener('click', () => {
     const s = document.getElementById('home-search').value.trim();
     let hash = 'home';
@@ -226,7 +221,7 @@ function renderDashboard(app) {
   `;
 }
 
-// ---------- AJOUT PRODUIT (inchangé, déjà avec upload) ----------
+// ---------- AJOUT PRODUIT ----------
 function renderAddProduct(app) {
   const session = DB.getSession();
   if (!session || session.role !== 'seller') { Router.navigate('login'); return; }
@@ -297,7 +292,7 @@ function renderAddProduct(app) {
   });
 }
 
-// ---------- LOGIN / REGISTER (inchangés) ----------
+// ---------- LOGIN / REGISTER ----------
 function renderLogin(app) {
   app.innerHTML = `
     <div class="page">
