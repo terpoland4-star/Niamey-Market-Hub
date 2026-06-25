@@ -15,6 +15,7 @@ function renderHome(app) {
   app.innerHTML = `
     <div class="page">
       <div class="hero">
+        <img src="shops/assets/logo.png" alt="Logo" class="hero-logo">
         <h1>Niamey Market Hub</h1>
         <p>Le goût du marché, la confiance du digital</p>
       </div>
@@ -44,6 +45,7 @@ function renderHome(app) {
     </div>
   `;
 
+  // Gestion des clics sur les catégories
   document.querySelectorAll('.category-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const cat = chip.dataset.category;
@@ -53,6 +55,7 @@ function renderHome(app) {
     });
   });
 
+  // Recherche
   document.getElementById('btn-search').addEventListener('click', () => {
     const s = document.getElementById('home-search').value.trim();
     let hash = 'home';
