@@ -1,6 +1,6 @@
-// pages.js – Vues de l'application (Priorité 1)
+// pages.js – Vues de l'application (Priorité 2 – Design amélioré)
 
-// ---------- HOME (avec recherche) ----------
+// ---------- HOME (avec recherche et catégories) ----------
 function renderHome(app) {
   const products = DB.getProducts();
   const searchQuery = Router.params.query?.get('search')?.toLowerCase() || '';
@@ -14,38 +14,56 @@ function renderHome(app) {
 
   app.innerHTML = `
     <div class="page">
-      <h2>Produits disponibles</h2>
-      <div class="search-bar" style="display:flex; gap:8px; margin-bottom:16px;">
-        <input type="text" id="home-search" placeholder="Rechercher..." value="${searchQuery.replace(/"/g,'&quot;')}" style="flex:1; padding:10px; border:1px solid var(--border); border-radius:8px;">
-        <select id="home-category" style="padding:10px; border:1px solid var(--border); border-radius:8px;">
-          <option value="all">Toutes catégories</option>
-          ${categories.map(c => `<option value="${c}" ${categoryFilter===c?'selected':''}>${c}</option>`).join('')}
-        </select>
+      <!-- Hero -->
+      <div class="hero">
+        <h1>Bienvenue sur Niamey Market Hub</h1>
+        <p>Trouvez les meilleurs produits près de chez vous</p>
+      </div>
+
+      <!-- Catégories -->
+      <div class="categories-section">
+        <div class="category-chip ${categoryFilter==='all'?'active':''}" data-category="all">Tout</div>
+        ${categories.map(cat => `
+          <div class="category-chip ${categoryFilter===cat?'active':''}" data-category="${cat}">${cat}</div>
+        `).join('')}
+      </div>
+
+      <!-- Barre de recherche -->
+      <div class="search-bar">
+        <input type="text" id="home-search" placeholder="Rechercher un produit..." value="${searchQuery.replace(/"/g,'&quot;')}">
         <button class="btn btn-primary" id="btn-search">🔍</button>
       </div>
+
+      <h3>Produits disponibles</h3>
       <div class="product-grid">
-        ${filtered.length === 0 ? '<p>Aucun produit trouvé.</p>' : filtered.map(p => `
-          <div class="product-card" onclick="Router.navigate('product/${p.id}')" style="cursor:pointer;">
+        ${filtered.length === 0 ? '<p style="grid-column:1/-1;text-align:center;">Aucun produit trouvé.</p>' : filtered.map(p => `
+          <div class="product-card" onclick="Router.navigate('product/${p.id}')">
             <img src="${p.thumbnail || 'https://placehold.co/300x200/ccc/666'}" alt="${p.name}">
             <h3>${p.name}</h3>
             <p class="price-current">${Number(p.price).toLocaleString()} FCFA</p>
-            <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); addToCart('${p.id}')">Commander</button>
           </div>
         `).join('')}
       </div>
     </div>
   `;
 
-  document.getElementById('btn-search').onclick = () => {
+  // Gestion des clics sur les catégories
+  document.querySelectorAll('.category-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const cat = chip.dataset.category;
+      let hash = 'home';
+      if (cat !== 'all') hash += `?category=${encodeURIComponent(cat)}`;
+      Router.navigate(hash);
+    });
+  });
+
+  // Recherche
+  document.getElementById('btn-search').addEventListener('click', () => {
     const s = document.getElementById('home-search').value.trim();
-    const cat = document.getElementById('home-category').value;
     let hash = 'home';
-    const params = [];
-    if (s) params.push(`search=${encodeURIComponent(s)}`);
-    if (cat !== 'all') params.push(`category=${encodeURIComponent(cat)}`);
-    if (params.length) hash += '?' + params.join('&');
+    if (s) hash += `?search=${encodeURIComponent(s)}`;
     Router.navigate(hash);
-  };
+  });
 }
 
 // ---------- DÉTAIL PRODUIT ----------
@@ -339,7 +357,6 @@ function addToCart(productId) {
   if (!session) { alert('Connectez-vous pour commander.'); Router.navigate('login'); return; }
   const product = DB.getProductById(productId);
   if (!product) return;
-  // Créer une commande
   const order = {
     productId: product.id,
     buyerId: session.id,
@@ -351,6 +368,5 @@ function addToCart(productId) {
   DB.addOrder(order);
   const message = `Bonjour, je viens de passer une commande (#${order.id}) : ${product.name} à ${product.price} FCFA.`;
   window.open(`https://wa.me/22786762903?text=${encodeURIComponent(message)}`, '_blank');
-  // Rediriger vers les commandes
   Router.navigate('orders');
 }
